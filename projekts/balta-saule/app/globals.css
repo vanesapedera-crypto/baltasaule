@@ -1,0 +1,203 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   Balta Saule — luxury design system (Tailwind CSS v4)
+   ========================================================================== */
+
+@theme {
+  /* --- Colors -------------------------------------------------------- */
+  --color-cream: #faf6ef;
+  --color-linen: #f1e9dc;
+  --color-sand: #e2d3bc;
+  --color-amber: #c9954c;
+  --color-caramel: #a86b3c;
+  --color-wood: #7a5236;
+  --color-espresso: #3b2a20;
+  --color-ink: #1a1614;
+
+  --color-background: var(--color-cream);
+  --color-foreground: var(--color-ink);
+  --color-muted: color-mix(in oklab, var(--color-ink) 62%, var(--color-cream));
+  --color-line: color-mix(in oklab, var(--color-wood) 28%, transparent);
+  --color-accent: var(--color-caramel);
+
+  /* --- Fonts --------------------------------------------------------- */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-cormorant), "Cormorant Garamond", ui-serif, Georgia, serif;
+  --font-script: var(--font-allura), "Allura", cursive;
+
+  /* --- Tracking ------------------------------------------------------ */
+  --tracking-luxe: 0.18em;
+  --tracking-display: -0.02em;
+
+  /* --- Motion -------------------------------------------------------- */
+  --ease-luxe: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* --- Layout -------------------------------------------------------- */
+  --container-site: 80rem;
+}
+
+/* --- Base --------------------------------------------------------------- */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 4rem;
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  @media (width >= 64rem) {
+    html {
+      scroll-padding-top: 5rem;
+    }
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-serif text-espresso;
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: var(--tracking-display);
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background-color: var(--color-sand);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 1px solid var(--color-caramel);
+    outline-offset: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* --- Utilities (mobile first) ------------------------------------------- */
+
+/* Horizontal container with responsive gutters */
+@utility container-x {
+  width: 100%;
+  max-width: var(--container-site);
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+
+  @media (width >= 40rem) {
+    padding-inline: 2rem;
+  }
+  @media (width >= 64rem) {
+    padding-inline: 3rem;
+  }
+}
+
+/* Vertical section rhythm */
+@utility section-y {
+  padding-block: 4.5rem;
+
+  @media (width >= 48rem) {
+    padding-block: 6.5rem;
+  }
+  @media (width >= 80rem) {
+    padding-block: 8.5rem;
+  }
+}
+
+/* Largest display headline */
+@utility display-xl {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-size: clamp(3rem, 1.6rem + 7vw, 8rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+
+/* Secondary display headline */
+@utility display-lg {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(2.25rem, 1.5rem + 3.75vw, 4.75rem);
+  line-height: 1.05;
+  letter-spacing: var(--tracking-display);
+}
+
+/* Italic serif statement / pull quote */
+@utility statement {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.5rem, 1.15rem + 1.75vw, 2.625rem);
+  line-height: 1.3;
+  color: var(--color-espresso);
+  text-wrap: balance;
+}
+
+/* Understated link with animated underline */
+@utility text-link {
+  display: inline;
+  color: var(--color-espresso);
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-luxe);
+  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 1px;
+  padding-bottom: 0.25em;
+  transition:
+    background-size 0.5s var(--ease-luxe),
+    color 0.3s var(--ease-luxe);
+
+  &:hover {
+    color: var(--color-caramel);
+    background-size: 0% 1px;
+    background-position: 100% 100%;
+  }
+}
+
+/* Label ········· value (e.g. menu or price list rows).
+   Usage: <div class="dotted-leader"><span>Label</span><span>€ 12</span></div> */
+@utility dotted-leader {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+
+  &::after {
+    content: "";
+    order: 1;
+    flex: 1 1 auto;
+    min-width: 1.5rem;
+    border-bottom: 1px dotted var(--color-wood);
+    opacity: 0.55;
+    transform: translateY(-0.3em);
+  }
+
+  & > :last-child {
+    order: 2;
+    white-space: nowrap;
+  }
+}
