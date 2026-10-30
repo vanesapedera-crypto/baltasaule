@@ -1,0 +1,10 @@
+{
+  "name": "balta-saule-root",
+  "private": true,
+  "description": "Ērtībai: ļauj palaist komandas no galvenās mapes. Īstais projekts ir projekts/balta-saule.",
+  "scripts": {
+    "dev": "npm --prefix projekts/balta-saule run dev",
+    "build": "npm --prefix projekts/balta-saule run build",
+    "start": "npm --prefix projekts/balta-saule run start"
+  }
+}

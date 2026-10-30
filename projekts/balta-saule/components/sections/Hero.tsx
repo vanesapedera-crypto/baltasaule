@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import {
   motion,
   useReducedMotion,
@@ -66,7 +67,7 @@ export default function Hero() {
             fill
             priority
             sizes="100vw"
-            quality={85}
+            quality={90}
             className="object-cover object-[50%_40%]"
           />
         </motion.div>
@@ -122,7 +123,7 @@ export default function Hero() {
           </motion.p>
 
           <motion.div variants={fade} className="mt-9 flex flex-col gap-3 sm:flex-row sm:gap-4">
-            <a
+            <Link
               href={hero.primaryCta.href}
               className="group relative inline-flex items-center justify-center overflow-hidden bg-cream px-8 py-4 text-[0.7rem] font-medium tracking-luxe text-espresso uppercase"
             >
@@ -131,13 +132,13 @@ export default function Hero() {
                 className="absolute inset-0 origin-bottom scale-y-0 bg-amber transition-transform duration-500 ease-luxe group-hover:scale-y-100"
               />
               <span className="relative">{hero.primaryCta.label}</span>
-            </a>
-            <a
+            </Link>
+            <Link
               href={hero.secondaryCta.href}
               className="inline-flex items-center justify-center border border-cream/60 px-8 py-4 text-[0.7rem] font-medium tracking-luxe text-cream uppercase backdrop-blur-sm transition-colors duration-500 hover:border-cream hover:bg-cream/10"
             >
               {hero.secondaryCta.label}
-            </a>
+            </Link>
           </motion.div>
         </motion.div>
 

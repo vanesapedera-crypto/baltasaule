@@ -5,15 +5,15 @@
    ========================================================================== */
 
 @theme {
-  /* --- Colors -------------------------------------------------------- */
-  --color-cream: #faf6ef;
-  --color-linen: #f1e9dc;
-  --color-sand: #e2d3bc;
-  --color-amber: #c9954c;
-  --color-caramel: #a86b3c;
-  --color-wood: #7a5236;
-  --color-espresso: #3b2a20;
-  --color-ink: #1a1614;
+  /* --- Colors: "Balts un zelts" ------------------------------------- */
+  --color-cream: #ffffff;
+  --color-linen: #f6f2eb;
+  --color-sand: #e8e0d2;
+  --color-amber: #d2ae68;
+  --color-caramel: #8c6a2f;
+  --color-wood: #8a7a63;
+  --color-espresso: #222222;
+  --color-ink: #1a1a1a;
 
   --color-background: var(--color-cream);
   --color-foreground: var(--color-ink);

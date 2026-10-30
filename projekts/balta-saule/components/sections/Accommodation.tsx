@@ -1,71 +1,28 @@
 import { Mail, Phone } from "lucide-react";
+import PhotoCollage from "@/components/sections/PhotoCollage";
+import SectionHeading from "@/components/sections/SectionHeading";
 import Reveal from "@/components/ui/Reveal";
 import RevealImage from "@/components/ui/RevealImage";
-import { accommodation, contact, images, rooms } from "@/lib/data";
+import { accommodation, accommodationGallery, contact, rooms } from "@/lib/data";
 import { formatPrice } from "@/lib/format";
 
 export default function Accommodation() {
   return (
     <section id="naktsmitnes" aria-labelledby="stay-title" className="section-y bg-linen">
       <div className="container-x">
-        {/* Virsraksts */}
-        <div className="grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-10">
-          <div className="lg:col-span-7">
-            <Reveal>
-              <p className="text-[0.7rem] font-medium tracking-luxe text-caramel uppercase">
-                {accommodation.eyebrow}
-              </p>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <h2 id="stay-title" className="display-lg mt-5">
-                {accommodation.title}
-              </h2>
-            </Reveal>
-          </div>
-          <Reveal delay={0.2} className="lg:col-span-5 lg:pb-3">
-            <p className="text-base leading-relaxed text-ink/75 sm:text-[1.05rem]">
-              {accommodation.intro}
-            </p>
-          </Reveal>
-        </div>
+        <SectionHeading
+          id="stay-title"
+          eyebrow={accommodation.eyebrow}
+          title={accommodation.title}
+          accent={accommodation.titleAccent}
+          paragraphs={accommodation.intro}
+        />
 
-        {/* Fotogrāfijas */}
-        <div className="mt-14 grid grid-cols-2 items-start gap-3 sm:gap-5 lg:mt-20 lg:grid-cols-12 lg:gap-6">
-          <RevealImage
-            image={images.accommodation}
-            sizes="(min-width: 1024px) 40vw, 100vw"
-            className="col-span-2 aspect-[4/5] lg:col-span-5"
-          />
-          <RevealImage
-            image={images.balcony}
-            delay={0.15}
-            sizes="(min-width: 1024px) 32vw, 50vw"
-            className="aspect-[3/4] lg:col-span-4 lg:mt-24"
-          />
-          <RevealImage
-            image={images.accommodationExterior}
-            delay={0.3}
-            sizes="(min-width: 1024px) 24vw, 50vw"
-            className="aspect-[3/4] lg:col-span-3 lg:mt-48"
-          />
-          <RevealImage
-            image={images.veranda}
-            sizes="(min-width: 1024px) 48vw, 100vw"
-            className="col-span-2 aspect-[3/2] lg:col-span-6"
-          />
-          <RevealImage
-            image={images.garden}
-            delay={0.15}
-            sizes="(min-width: 1024px) 24vw, 50vw"
-            className="aspect-[4/5] lg:col-span-3 lg:mt-16"
-          />
-          <RevealImage
-            image={images.contact}
-            delay={0.3}
-            sizes="(min-width: 1024px) 24vw, 50vw"
-            className="aspect-[4/5] lg:col-span-3 lg:mt-32"
-          />
-        </div>
+        {/* Fotogrāfiju kolāža — visas bildes vienuviet */}
+        <PhotoCollage
+          images={[accommodationGallery.main, ...accommodationGallery.side, ...accommodationGallery.thumbs]}
+          className="mt-14 lg:mt-16"
+        />
 
         {/* Numuri — kad būs pievienoti lib/data.ts */}
         {rooms.length > 0 ? (
@@ -111,25 +68,21 @@ export default function Accommodation() {
             ))}
           </ul>
         ) : (
-          <Reveal className="mt-20 grid gap-8 border-y border-line py-10 lg:mt-28 lg:grid-cols-12 lg:items-center lg:py-12">
-            <p className="statement lg:col-span-7">{accommodation.roomsNote}</p>
-            <div className="flex flex-col gap-3 sm:flex-row lg:col-span-5 lg:justify-end">
+          <Reveal className="mt-10 flex flex-col gap-5 bg-espresso px-6 py-6 text-cream sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:mt-12">
+            <p className="font-serif text-xl italic sm:text-2xl">{accommodation.roomsNote}</p>
+            <div className="flex flex-wrap gap-2.5">
               <a
                 href={contact.phoneHref}
-                className="group relative inline-flex items-center justify-center gap-3 overflow-hidden bg-espresso px-7 py-4 text-[0.7rem] font-medium tracking-luxe text-cream uppercase"
+                className="inline-flex items-center gap-2.5 bg-cream px-5 py-3 text-[0.68rem] font-medium tracking-luxe text-espresso uppercase transition-colors duration-300 hover:bg-amber"
               >
-                <span
-                  aria-hidden
-                  className="absolute inset-0 origin-bottom scale-y-0 bg-caramel transition-transform duration-500 ease-luxe group-hover:scale-y-100"
-                />
-                <Phone className="relative size-4" strokeWidth={1.5} aria-hidden />
-                <span className="relative">{contact.phone}</span>
+                <Phone className="size-3.5" strokeWidth={1.5} aria-hidden />
+                {contact.phone}
               </a>
               <a
                 href={contact.emailHref}
-                className="inline-flex items-center justify-center gap-3 border border-espresso/70 px-7 py-4 text-[0.7rem] font-medium tracking-luxe text-espresso uppercase transition-colors duration-500 hover:bg-espresso hover:text-cream"
+                className="inline-flex items-center gap-2.5 border border-cream/40 px-5 py-3 text-[0.68rem] font-medium tracking-luxe text-cream uppercase transition-colors duration-300 hover:border-cream hover:bg-cream/10"
               >
-                <Mail className="size-4" strokeWidth={1.5} aria-hidden />
+                <Mail className="size-3.5" strokeWidth={1.5} aria-hidden />
                 Rakstīt
               </a>
             </div>
@@ -147,12 +100,30 @@ export default function Accommodation() {
             {accommodation.extras.map((extra, i) => (
               <li key={extra.name}>
                 <article>
-                  <RevealImage
-                    image={extra.image}
-                    delay={i * 0.15}
-                    sizes="(min-width: 640px) 45vw, 100vw"
-                    className="aspect-[4/3]"
-                  />
+                  {extra.inset ? (
+                    // Divas bildes viena pāri otrai — tāpat kā sadaļā "Par mums"
+                    <div className="relative aspect-[4/3]">
+                      <RevealImage
+                        image={extra.image}
+                        delay={i * 0.15}
+                        sizes="(min-width: 640px) 36vw, 80vw"
+                        className="absolute top-0 left-0 h-[88%] w-[74%]"
+                      />
+                      <RevealImage
+                        image={extra.inset}
+                        delay={0.25 + i * 0.15}
+                        sizes="(min-width: 640px) 18vw, 45vw"
+                        className="absolute right-0 bottom-0 aspect-[3/4] w-[40%] border-[6px] border-linen shadow-[0_30px_60px_-30px_rgba(26,26,26,0.45)] lg:border-8"
+                      />
+                    </div>
+                  ) : (
+                    <RevealImage
+                      image={extra.image}
+                      delay={i * 0.15}
+                      sizes="(min-width: 640px) 45vw, 100vw"
+                      className="aspect-[4/3]"
+                    />
+                  )}
                   <Reveal delay={0.2 + i * 0.15}>
                     <div className="dotted-leader mt-6">
                       <h4 className="font-serif text-3xl text-espresso">{extra.name}</h4>

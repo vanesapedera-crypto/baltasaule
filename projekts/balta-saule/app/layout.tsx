@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Allura, Cormorant_Garamond, Inter } from "next/font/google";
+import Footer from "@/components/sections/Footer";
+import Header from "@/components/sections/Header";
 import { site } from "@/lib/data";
 import "./globals.css";
 
@@ -55,7 +57,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#faf6ef",
+  themeColor: "#ffffff",
 };
 
 export default function RootLayout({
@@ -68,7 +70,11 @@ export default function RootLayout({
       lang={site.lang}
       className={`${inter.variable} ${cormorant.variable} ${allura.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        <Header />
+        <main id="top">{children}</main>
+        <Footer />
+      </body>
     </html>
   );
 }

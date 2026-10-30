@@ -49,6 +49,7 @@ export default function RevealImage({
           fill
           sizes={sizes}
           priority={priority}
+          quality={90}
           className={cn("object-cover", imageClassName)}
         />
       </motion.div>

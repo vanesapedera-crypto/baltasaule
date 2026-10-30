@@ -10,13 +10,19 @@ import {
   type Variants,
 } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ArrowUpRight, Mail, Phone } from "lucide-react";
 import { contact, navItems, site, socials } from "@/lib/data";
 import { useActiveSection } from "@/lib/use-active-section";
 import { cn } from "@/lib/utils";
 
+const SECTION_IDS = navItems
+  .map((item) => item.href)
+  .filter((href) => href.startsWith("#") && href !== "#top")
+  .map((href) => href.slice(1));
+
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
-const SECTION_IDS = navItems.map((item) => item.href.slice(1));
 const MENU_CLOSE_MS = 450;
 
 const listVariants: Variants = {
@@ -34,7 +40,10 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
 
-  const active = useActiveSection(SECTION_IDS);
+  const pathname = usePathname();
+  const activeSection = useActiveSection(SECTION_IDS);
+  const isActive = (href: string) =>
+    href === "#top" ? activeSection === null : href === `#${activeSection}`;
   const reduceMotion = useReducedMotion();
   const { scrollY } = useScroll();
 
@@ -44,6 +53,12 @@ export default function Header() {
     setScrolled(y > 24);
     setHidden(y > prev && y > 160);
   });
+
+  // Pārejot uz citu lapu, izvēlne aizveras un header atkal redzams.
+  useEffect(() => {
+    setOpen(false);
+    setHidden(false);
+  }, [pathname]);
 
   // Mobilā izvēlne: bloķē ritināšanu, aizver ar Esc un pārejot uz desktop.
   useEffect(() => {
@@ -66,9 +81,19 @@ export default function Header() {
     };
   }, [open]);
 
-  // Smooth scroll uz sadaļu (ņem vērā scroll-padding-top no globals.css).
+  // Smooth scroll uz enkuru (piem. #kontakti kājenē) — ņem vērā scroll-padding-top.
+  // Saitēm uz citām lapām tikai aizver izvēlni; navigāciju veic Next.js Link.
   const scrollToHash = useCallback(
     (e: MouseEvent<HTMLAnchorElement>, href: string) => {
+      if (href.startsWith("/")) {
+        if (href === "/" && pathname === "/") {
+          e.preventDefault();
+          window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+        }
+        setOpen(false);
+        return;
+      }
+
       const behavior: ScrollBehavior = reduceMotion ? "auto" : "smooth";
       const go = () => {
         if (href === "#top") {
@@ -89,7 +114,7 @@ export default function Header() {
         go();
       }
     },
-    [open, reduceMotion],
+    [open, pathname, reduceMotion],
   );
 
   const glass = scrolled || open;
@@ -108,7 +133,7 @@ export default function Header() {
           className={cn(
             "border-b transition-[background-color,border-color,box-shadow,backdrop-filter] duration-500 ease-luxe",
             glass
-              ? "border-line bg-cream/70 shadow-[0_10px_40px_-18px_rgba(59,42,32,0.25)] backdrop-blur-xl backdrop-saturate-150"
+              ? "border-line bg-cream/70 shadow-[0_10px_40px_-18px_rgba(26,26,26,0.25)] backdrop-blur-xl backdrop-saturate-150"
               : "border-transparent bg-transparent",
           )}
         >
@@ -119,9 +144,9 @@ export default function Header() {
             )}
           >
             {/* Logo — gaišā versija virs Hero, tumšā uz "stikla" */}
-            <a
-              href="#top"
-              onClick={(e) => scrollToHash(e, "#top")}
+            <Link
+              href="/"
+              onClick={(e) => scrollToHash(e, "/")}
               aria-label={`${site.name} — uz sākumu`}
               className={cn(
                 "relative block shrink-0 transition-[height] duration-500 ease-luxe",
@@ -151,32 +176,32 @@ export default function Header() {
                   onDark ? "opacity-100" : "opacity-0",
                 )}
               />
-            </a>
+            </Link>
 
             {/* Desktop navigācija */}
             <nav aria-label="Galvenā navigācija" className="hidden lg:block">
               <ul className="flex items-center">
                 {navItems.map((item) => {
-                  const isActive = active === item.href.slice(1);
+                  const current = isActive(item.href);
                   return (
                     <li key={item.href}>
-                      <a
+                      <Link
                         href={item.href}
                         onClick={(e) => scrollToHash(e, item.href)}
-                        aria-current={isActive ? "location" : undefined}
+                        aria-current={current ? "page" : undefined}
                         className={cn(
                           "relative block px-4 py-2 text-[0.7rem] font-medium tracking-luxe uppercase transition-colors duration-300",
                           onDark
-                            ? isActive
+                            ? current
                               ? "text-cream"
                               : "text-cream/70 hover:text-cream"
-                            : isActive
+                            : current
                               ? "text-espresso"
                               : "text-espresso/55 hover:text-espresso",
                         )}
                       >
                         {item.label}
-                        {isActive && (
+                        {current && (
                           <motion.span
                             layoutId="nav-active"
                             aria-hidden
@@ -184,7 +209,7 @@ export default function Header() {
                             transition={{ type: "spring", stiffness: 380, damping: 34 }}
                           />
                         )}
-                      </a>
+                      </Link>
                     </li>
                   );
                 })}
@@ -193,7 +218,7 @@ export default function Header() {
 
             <div className="flex items-center gap-3">
               {/* Desktop CTA */}
-              <a
+              <Link
                 href="#kontakti"
                 onClick={(e) => scrollToHash(e, "#kontakti")}
                 className={cn(
@@ -216,7 +241,7 @@ export default function Header() {
                 >
                   Rezervēt
                 </span>
-              </a>
+              </Link>
 
               {/* Mobilā izvēlnes poga */}
               <button
@@ -277,13 +302,13 @@ export default function Header() {
             <nav aria-label="Mobilā navigācija" className="container-x flex flex-1 flex-col pt-24 pb-10">
               <motion.ul variants={listVariants} initial="hidden" animate="show" exit="hidden">
                 {navItems.map((item, i) => {
-                  const isActive = active === item.href.slice(1);
+                  const current = isActive(item.href);
                   return (
                     <motion.li key={item.href} variants={itemVariants}>
-                      <a
+                      <Link
                         href={item.href}
                         onClick={(e) => scrollToHash(e, item.href)}
-                        aria-current={isActive ? "location" : undefined}
+                        aria-current={current ? "page" : undefined}
                         className="group flex items-baseline gap-5 border-b border-line py-4"
                       >
                         <span className="w-6 text-[0.65rem] font-medium tracking-luxe text-caramel">
@@ -292,14 +317,14 @@ export default function Header() {
                         <span
                           className={cn(
                             "font-serif text-[2.25rem] leading-none transition-all duration-500 ease-luxe sm:text-5xl",
-                            isActive
+                            current
                               ? "text-caramel italic"
                               : "text-espresso group-hover:translate-x-2 group-hover:text-caramel",
                           )}
                         >
                           {item.label}
                         </span>
-                      </a>
+                      </Link>
                     </motion.li>
                   );
                 })}
@@ -311,13 +336,13 @@ export default function Header() {
                 animate={{ opacity: 1, y: 0, transition: { delay: 0.65, duration: 0.6, ease: EASE } }}
                 exit={{ opacity: 0, transition: { duration: 0.2 } }}
               >
-                <a
+                <Link
                   href="#kontakti"
                   onClick={(e) => scrollToHash(e, "#kontakti")}
                   className="flex w-full items-center justify-center bg-espresso px-6 py-4 text-[0.7rem] font-medium tracking-luxe text-cream uppercase"
                 >
                   Rezervēt
-                </a>
+                </Link>
 
                 <div className="space-y-3 text-sm text-espresso/80">
                   <a href={contact.phoneHref} className="flex items-center gap-3">

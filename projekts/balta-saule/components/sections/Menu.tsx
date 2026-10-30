@@ -1,4 +1,6 @@
 import { Phone } from "lucide-react";
+import PhotoCollage from "@/components/sections/PhotoCollage";
+import SectionHeading from "@/components/sections/SectionHeading";
 import Reveal from "@/components/ui/Reveal";
 import RevealImage from "@/components/ui/RevealImage";
 import {
@@ -7,6 +9,7 @@ import {
   desserts,
   images,
   kitchen,
+  kitchenGallery,
   salads,
   unitLabels,
   warmTable,
@@ -81,39 +84,19 @@ export default function Menu() {
   return (
     <section id="edienkarte" aria-labelledby="menu-title" className="section-y bg-cream">
       <div className="container-x">
-        {/* Ievads + fotogrāfijas */}
-        <div className="grid gap-14 lg:grid-cols-12 lg:items-center lg:gap-10">
-          <div className="lg:col-span-5">
-            <Reveal>
-              <p className="text-[0.7rem] font-medium tracking-luxe text-caramel uppercase">
-                {kitchen.eyebrow}
-              </p>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <h2 id="menu-title" className="display-lg mt-5">
-                {kitchen.title}
-              </h2>
-            </Reveal>
-            <Reveal delay={0.2}>
-              <p className="mt-8 text-base leading-relaxed text-ink/75 sm:text-[1.05rem]">
-                {kitchen.intro}
-              </p>
-            </Reveal>
-          </div>
-          <div className="grid grid-cols-5 items-start gap-3 sm:gap-5 lg:col-span-6 lg:col-start-7">
-            <RevealImage
-              image={images.kitchen}
-              sizes="(min-width: 1024px) 30vw, 60vw"
-              className="col-span-3 aspect-[3/4]"
-            />
-            <RevealImage
-              image={images.table}
-              delay={0.2}
-              sizes="(min-width: 1024px) 20vw, 40vw"
-              className="col-span-2 mt-16 aspect-[3/4] lg:mt-28"
-            />
-          </div>
-        </div>
+        <SectionHeading
+          id="menu-title"
+          eyebrow={kitchen.eyebrow}
+          title={kitchen.title}
+          accent={kitchen.titleAccent}
+          paragraphs={kitchen.intro}
+        />
+
+        {/* Fotogrāfiju kolāža — visas bildes vienuviet */}
+        <PhotoCollage
+          images={[kitchenGallery.main, ...kitchenGallery.side, ...kitchenGallery.thumbs]}
+          className="mt-14 lg:mt-16"
+        />
 
         {/* Banketa galdi */}
         <div className="mt-24 lg:mt-32">
@@ -173,6 +156,45 @@ export default function Menu() {
               </p>
             </div>
           </Reveal>
+        </div>
+
+        {/* Omītes virtuves fotogrāfijas */}
+        <div className="mt-20 grid grid-cols-2 gap-3 sm:gap-5 lg:mt-28 lg:h-[42rem] lg:grid-cols-4 lg:grid-rows-2 lg:gap-6">
+          <RevealImage
+            image={images.fruit}
+            sizes="(min-width: 1024px) 25vw, 50vw"
+            className="aspect-[3/4] lg:row-span-2 lg:aspect-auto lg:h-full"
+          />
+          <RevealImage
+            image={images.meatPlatter}
+            delay={0.1}
+            sizes="(min-width: 1024px) 25vw, 100vw"
+            className="order-first col-span-2 aspect-[3/2] lg:order-none lg:col-span-1 lg:aspect-auto lg:h-full"
+          />
+          <RevealImage
+            image={images.fishMarinade}
+            delay={0.15}
+            sizes="(min-width: 1024px) 25vw, 100vw"
+            className="order-last col-span-2 aspect-[3/2] lg:order-none lg:col-span-1 lg:aspect-auto lg:h-full"
+          />
+          <RevealImage
+            image={images.banquet}
+            delay={0.2}
+            sizes="(min-width: 1024px) 25vw, 50vw"
+            className="aspect-[3/4] lg:row-span-2 lg:aspect-auto lg:h-full"
+          />
+          <RevealImage
+            image={images.beanSalad}
+            delay={0.15}
+            sizes="(min-width: 1024px) 25vw, 50vw"
+            className="aspect-[4/3] lg:aspect-auto lg:h-full"
+          />
+          <RevealImage
+            image={images.greenSalad}
+            delay={0.25}
+            sizes="(min-width: 1024px) 25vw, 50vw"
+            className="aspect-[4/3] lg:aspect-auto lg:h-full"
+          />
         </div>
 
         {/* Salāti, uzkodas, deserti */}

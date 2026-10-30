@@ -1,11 +1,10 @@
 import Image from "next/image";
+import Link from "next/link";
 import { ArrowUp, ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
-import { contact, navItems, site, socials } from "@/lib/data";
+import { contact, site, socials } from "@/lib/data";
 
 const linkClass =
   "underline decoration-transparent decoration-1 underline-offset-[6px] transition-colors duration-300 hover:text-cream hover:decoration-amber";
-
-const headingClass = "mb-6 font-sans text-[0.68rem] font-medium tracking-luxe text-amber uppercase";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -39,114 +38,93 @@ export default function Footer() {
         {site.name} — kontakti un navigācija
       </h2>
 
-      <div className="container-x pt-20 pb-14 lg:pt-28 lg:pb-20">
-        <div className="grid gap-14 sm:grid-cols-2 lg:grid-cols-12 lg:gap-10">
-          {/* Zīmols */}
-          <div className="sm:col-span-2 lg:col-span-4">
-            <a href="#top" aria-label={`${site.name} — uz sākumu`} className="inline-block">
+      <div className="container-x py-14 lg:py-20">
+        <div className="grid gap-10 lg:grid-cols-12 lg:gap-14">
+          {/* Kontakti */}
+          <div className="lg:col-span-6">
+            <Link href="/" aria-label={`${site.name} — uz sākumu`} className="inline-block">
               <Image
                 src="/images/logo-light.png"
                 alt={site.name}
                 width={906}
                 height={631}
-                sizes="176px"
-                className="h-28 w-auto lg:h-32"
+                sizes="140px"
+                className="h-20 w-auto"
               />
-            </a>
-            <p className="mt-6 text-[0.7rem] font-medium tracking-luxe text-sand/80 uppercase">
-              {site.tagline}
-            </p>
-            <p className="mt-5 max-w-sm font-serif text-2xl leading-snug text-sand italic">
-              {contact.cta}
-            </p>
-            <a
-              href={contact.phoneHref}
-              className={`mt-8 inline-flex items-center gap-2 text-[0.7rem] font-medium tracking-luxe text-cream uppercase ${linkClass}`}
-            >
-              Rezervēt atpūtu vai svinības
-              <ArrowUpRight className="size-3.5" strokeWidth={1.5} aria-hidden />
-            </a>
-          </div>
+            </Link>
 
-          {/* Kontakti */}
-          <div className="lg:col-span-4">
-            <h3 className={headingClass}>Kontakti</h3>
-            <address className="space-y-4 text-sm leading-relaxed not-italic">
-              <a
-                href={contact.mapUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`flex gap-3 ${linkClass}`}
-              >
-                <MapPin className="mt-0.5 size-4 shrink-0 text-amber" strokeWidth={1.5} aria-hidden />
-                <span>
-                  {street}, {locality}
-                  <br />
-                  {parish}, {region}
-                  <br />
-                  {postalCode}, {country}
-                </span>
-              </a>
-              <a href={contact.emailHref} className={`flex items-center gap-3 ${linkClass}`}>
-                <Mail className="size-4 shrink-0 text-amber" strokeWidth={1.5} aria-hidden />
-                {contact.email}
-              </a>
-            </address>
-
-            <ul className="mt-6 space-y-4 border-t border-cream/10 pt-6">
+            {/* Tālruņi */}
+            <ul className="mt-10 border-t border-cream/10">
               {contact.people.map((person) => (
-                <li key={person.phone}>
-                  <p className="text-[0.62rem] font-medium tracking-luxe text-linen/50 uppercase">
-                    {person.label}
-                  </p>
-                  <a
-                    href={person.phoneHref}
-                    className={`mt-1.5 flex items-center gap-3 text-sm ${linkClass}`}
-                  >
-                    <Phone className="size-4 shrink-0 text-amber" strokeWidth={1.5} aria-hidden />
-                    <span>
-                      {person.phone}
-                      <span className="text-linen/50"> · {person.name}</span>
+                <li
+                  key={person.phone}
+                  className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-b border-cream/10 py-4"
+                >
+                  <p>
+                    <span className="font-serif text-xl text-cream">{person.name}</span>
+                    <span className="ml-3 text-[0.62rem] font-medium tracking-luxe text-linen/50 uppercase">
+                      {person.label}
                     </span>
+                  </p>
+                  <a href={person.phoneHref} className={`inline-flex items-center gap-2 text-sm ${linkClass}`}>
+                    <Phone className="size-3.5 shrink-0 text-amber" strokeWidth={1.5} aria-hidden />
+                    {person.phone}
                   </a>
                 </li>
               ))}
             </ul>
-          </div>
 
-          {/* Navigācija */}
-          <nav aria-label="Kājenes navigācija" className="lg:col-span-2">
-            <h3 className={headingClass}>Navigācija</h3>
-            <ul className="space-y-3 text-sm">
-              {navItems.map((item) => (
-                <li key={item.href}>
-                  <a href={item.href} className={linkClass}>
-                    {item.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          {/* Sociālie tīkli */}
-          <div className="lg:col-span-2">
-            <h3 className={headingClass}>Sekojiet</h3>
-            <ul className="space-y-3 text-sm">
-              {socials.map((s) => (
-                <li key={s.name}>
+            {/* E-pasts, adrese, Facebook */}
+            <div className="mt-8 grid gap-6 text-sm sm:grid-cols-2">
+              <div className="space-y-3">
+                <a href={contact.emailHref} className={`flex items-center gap-3 ${linkClass}`}>
+                  <Mail className="size-4 shrink-0 text-amber" strokeWidth={1.5} aria-hidden />
+                  {contact.email}
+                </a>
+                {socials.map((s) => (
                   <a
+                    key={s.name}
                     href={s.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`inline-flex items-center gap-1.5 ${linkClass}`}
+                    className={`flex items-center gap-3 ${linkClass}`}
                   >
+                    <ArrowUpRight className="size-4 shrink-0 text-amber" strokeWidth={1.5} aria-hidden />
                     {s.name}
-                    <ArrowUpRight className="size-3" strokeWidth={1.5} aria-hidden />
                     <span className="sr-only">(atveras jaunā cilnē)</span>
                   </a>
-                </li>
-              ))}
-            </ul>
+                ))}
+              </div>
+              <address className="not-italic">
+                <a
+                  href={contact.mapUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`flex gap-3 leading-relaxed ${linkClass}`}
+                >
+                  <MapPin className="mt-0.5 size-4 shrink-0 text-amber" strokeWidth={1.5} aria-hidden />
+                  <span>
+                    {street}, {locality}
+                    <br />
+                    {parish}, {region}
+                    <br />
+                    {postalCode}, {country}
+                  </span>
+                  <span className="sr-only">(atveras jaunā cilnē)</span>
+                </a>
+              </address>
+            </div>
+          </div>
+
+          {/* Karte */}
+          <div className="relative h-72 overflow-hidden lg:col-span-6 lg:h-auto lg:min-h-[24rem]">
+            <iframe
+              title="Baltā Saule kartē"
+              src={`https://www.google.com/maps?q=${encodeURIComponent(`${street}, ${locality}, ${parish}, ${region}, ${postalCode}`)}&output=embed`}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="absolute inset-0 h-full w-full border-0 opacity-90 grayscale-[60%] sepia-[25%]"
+            />
           </div>
         </div>
       </div>
@@ -154,9 +132,27 @@ export default function Footer() {
       {/* Copyright */}
       <div className="border-t border-cream/10">
         <div className="container-x flex flex-col gap-4 py-6 text-xs text-linen/50 sm:flex-row sm:items-center sm:justify-between">
-          <p>
-            © {year} {site.name}. Visas tiesības aizsargātas.
-          </p>
+          <div className="flex flex-col gap-1.5 sm:flex-row sm:items-center sm:gap-5">
+            <p>
+              © {year} {site.name}. Visas tiesības aizsargātas.
+            </p>
+            {site.credit.name && (
+              <p className="text-[0.68rem] text-linen/25">
+                {site.credit.label}: {site.credit.name}
+                {site.credit.phone && (
+                  <>
+                    {" · "}
+                    <a
+                      href={site.credit.phoneHref}
+                      className="transition-colors duration-300 hover:text-linen/60"
+                    >
+                      {site.credit.phone}
+                    </a>
+                  </>
+                )}
+              </p>
+            )}
+          </div>
           <a
             href="#top"
             className="group inline-flex items-center gap-2 tracking-luxe uppercase transition-colors duration-300 hover:text-cream"
