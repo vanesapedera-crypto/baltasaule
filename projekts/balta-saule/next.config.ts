@@ -4,8 +4,9 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   images: {
-    formats: ["image/avif", "image/webp"],
-    qualities: [75, 90],
+    // Vercel bezmaksas plāna bilžu optimizācijas limits ir pārsniegts —
+    // bildes tiek rādītas tieši no /public bez apstrādes.
+    unoptimized: true,
   },
   experimental: {
     optimizePackageImports: ["lucide-react", "framer-motion"],
